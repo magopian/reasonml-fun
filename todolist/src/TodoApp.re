@@ -1,4 +1,11 @@
 let str = ReasonReact.stringToElement;
+
+let valueFromEvent = (evt) : string => (
+  evt
+  |> ReactEventRe.Form.target
+  |> ReactDOMRe.domElementToObj
+)##value;
+
 type item = {
   id: int,
   title: string,
@@ -9,17 +16,17 @@ type state = {
   items: list(item)
 };
 type action =
-  | AddItem
+  | AddItem(string)
   | ToggleItem(int);
 
 let component = ReasonReact.reducerComponent("TodoApp");
 
 let lastId = ref(0);
-let newItem = () => {
+let newItem = (text) => {
   lastId := lastId^ + 1;
   {
     id: lastId^,
-    title: "foobar",
+    title: text,
     completed: false
   }
 };
@@ -44,6 +51,29 @@ module TodoItem = {
   };
 };
 
+module Input = {
+  type state = string;
+  let component = ReasonReact.reducerComponent("Input");
+  let make = (~onSubmit, _) => {
+    ...component,
+    initialState: () => "",
+    reducer: (newText, _text) => ReasonReact.Update(newText),
+    render: ({state: text, reduce}) =>
+      <input
+        value=text
+        _type="text"
+        placeholder="Write something to do"
+        onChange=(reduce((evt) => valueFromEvent(evt)))
+        onKeyDown=((evt) =>
+          if (ReactEventRe.Keyboard.key(evt) == "Enter") {
+            onSubmit(text);
+            (reduce(() => ""))()
+          }
+        )
+      />
+  };
+};
+
 let make = (_children) => {
   ...component,
   initialState: () => {
@@ -53,7 +83,7 @@ let make = (_children) => {
   },
   reducer: (action, {items}) =>
     switch action {
-      | AddItem => ReasonReact.Update({items: [newItem(), ...items]})
+      | AddItem(text) => ReasonReact.Update({items: [newItem(text), ...items]})
       | ToggleItem(id) => {
         let items = List.map(
           (item) => item.id === id ? {...item, completed: !item.completed} : item,
@@ -66,7 +96,7 @@ let make = (_children) => {
     <div className="app">
       <div className="title">
         (str("What to do"))
-        <button onClick=(reduce((_event) => AddItem))>(str("Add something"))</button>
+        <Input onSubmit=(reduce((text) => AddItem(text)))/>
       </div>
       <div className="items">(
       items
