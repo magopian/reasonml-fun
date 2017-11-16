@@ -1,5 +1,6 @@
 let str = ReasonReact.stringToElement;
 type item = {
+  id: int,
   title: string,
   completed: bool
 };
@@ -11,9 +12,15 @@ type action =
   | AddItem;
 
 let component = ReasonReact.reducerComponent("TodoApp");
+
+let lastId = ref(0);
 let newItem = () => {
+  lastId := lastId^ + 1;
+  {
+    id: lastId^,
     title: "foobar",
     completed: false
+  }
 };
 
 module TodoItem = {
@@ -21,7 +28,7 @@ module TodoItem = {
   let make = (~item, children) => {
     ...component,
     render: (self) =>
-      <div className="item">
+      <div className="item" id=string_of_int(item.id)>
         <input
           _type="checkbox"
           checked=(Js.Boolean.to_js_boolean(item.completed))
@@ -36,7 +43,7 @@ let make = (children) => {
   ...component,
   initialState: () => {
     items: [
-      { title: "Write some things to do", completed: false}
+      { id: lastId^, title: "Write some things to do", completed: false}
     ]
   },
   reducer: (action, {items}) =>
@@ -52,7 +59,7 @@ let make = (children) => {
       </div>
       <div className="items">(
       items
-        |> List.map((item) => <TodoItem item />)
+        |> List.map((item) => <TodoItem item key=string_of_int(item.id) />)
         |> Array.of_list
         |> ReasonReact.arrayToElement
       )</div>
