@@ -25,9 +25,9 @@ let newItem = () => {
 
 module TodoItem = {
   let component = ReasonReact.statelessComponent("TodoItem");
-  let make = (~item, children) => {
+    let make = (~item, _children) => {
     ...component,
-    render: (self) =>
+    render: (_self) =>
       <div className="item" id=string_of_int(item.id)>
         <input
           _type="checkbox"
@@ -39,7 +39,7 @@ module TodoItem = {
   };
 };
 
-let make = (children) => {
+let make = (_children) => {
   ...component,
   initialState: () => {
     items: [
@@ -55,7 +55,7 @@ let make = (children) => {
     <div className="app">
       <div className="title">
         (str("What to do"))
-        <button onClick=(reduce((event) => AddItem))>(str("Add something"))</button>
+        <button onClick=(reduce((_event) => AddItem))>(str("Add something"))</button>
       </div>
       <div className="items">(
       items
