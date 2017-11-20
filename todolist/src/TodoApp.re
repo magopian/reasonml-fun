@@ -33,11 +33,7 @@ module TodoItem = {
     ...component,
     render: (_self) =>
       <div className="item" onClick=((_event) => onToggle()) id=(string_of_int(item.id))>
-        <input
-          _type="checkbox"
-          checked=(Js.Boolean.to_js_boolean(item.completed))
-          /* TODO make interactive */
-        />
+        <input _type="checkbox" checked=(Js.Boolean.to_js_boolean(item.completed)) />
         (str(item.title))
       </div>
   };
