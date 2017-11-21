@@ -1,11 +1,15 @@
+/* A Reason component */
 [%bs.raw {|require('./app.css')|}];
 
+/* Styling of antd components using the photon-ant theme */
 [%bs.raw {|require('photon-ant')|}];
 
 [@bs.module] external logo : string = "./logo.svg";
 
 module Card = {
+  /* Import a React (in JS) component from antd */
   [@bs.module "antd"] external card : ReasonReact.reactClass = "Card";
+  /* Wrap the React component so it's usable by Reason */
   let make = (~title: option(string)=?, children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=card,
@@ -14,8 +18,10 @@ module Card = {
     );
 };
 
+/* Declare the Reason component */
 let component = ReasonReact.statelessComponent("App");
 
+/* Implement the Reason component */
 let make = (~message, _children) => {
   ...component,
   render: (_self) =>
@@ -35,5 +41,6 @@ let make = (~message, _children) => {
     </div>
 };
 
+/* Wrap the Reason component so it's usable in React component in JS */
 let jsComponent =
   ReasonReact.wrapReasonForJs(~component, (jsProps) => make(~message=jsProps##message, [||]));
