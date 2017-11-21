@@ -61,3 +61,15 @@ management (who can see what).
         - Idea records: one per idea
     - Comments collection: one per idea (eg comments-{id_record})
         - Comment records: one record per comment
+
+
+### Setting up a new "group"
+
+As a kinto admin:
+- Create a new bucket (eg MomDadDaughterSon)
+- Create a new group (eg MomDadDaughterSon)
+- Add each user: choose a login/password and login using the
+  [kinto-admin](https://kinto.agopian.info/v1/admin/), then copy/paste the user
+  ID which will be something like `basicauth:.....`
+- Change the bucket permissions for the group: allowed to write and
+  collection:create
