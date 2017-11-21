@@ -17,3 +17,34 @@ $ yarn start
 
 This will create a reason app with all the goodness from create-react-app
 (including hot-reloading!).
+
+
+### Adding antd
+
+```
+$ yarn add antd
+$ yarn add react-app-rewired --dev
+$ yarn add babel-plugin-import --dev
+```
+
+Then rewire the scripts in `package.json`:
+
+```diff
+-    "start": "react-scripts start",
++    "start": "react-app-rewired start --scripts-version reason-scripts",
+-    "build": "react-scripts build",
++    "build": "react-app-rewired build --scripts-version reason-scripts",
+-    "test": "react-scripts test --env=jsdom",
++    "test": "react-app-rewired test --env=jsdom --scripts-version reason-scripts",
+-    "eject": "react-scripts eject",
++    "eject": "react-app-rewired eject --scripts-version reason-scripts",
+```
+
+and add a `config-overrides.json` file:
+
+```
+module.exports = function override(config, env) {
+  // do stuff with the webpack config...
+  return config;
+};
+```
