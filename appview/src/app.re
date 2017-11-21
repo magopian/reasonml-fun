@@ -4,6 +4,16 @@
 
 [@bs.module] external logo : string = "./logo.svg";
 
+module Card = {
+  [@bs.module "antd"] external card : ReasonReact.reactClass = "Card";
+  let make = (~title: option(string)=?, children) =>
+    ReasonReact.wrapJsForReason(
+      ~reactClass=card,
+      ~props={"title": Js.Nullable.from_opt(title)},
+      children
+    );
+};
+
 let component = ReasonReact.statelessComponent("App");
 
 let make = (~message, _children) => {
@@ -19,5 +29,8 @@ let make = (~message, _children) => {
         <code> (ReasonReact.stringToElement(" src/App.re ")) </code>
         (ReasonReact.stringToElement("and save to reload."))
       </p>
+      <Card title="I'm an antd card title">
+        (ReasonReact.stringToElement("and I'm an antd card content!"))
+      </Card>
     </div>
 };
