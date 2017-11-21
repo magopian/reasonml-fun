@@ -34,3 +34,6 @@ let make = (~message, _children) => {
       </Card>
     </div>
 };
+
+let jsComponent =
+  ReasonReact.wrapReasonForJs(~component, (jsProps) => make(~message=jsProps##message, [||]));

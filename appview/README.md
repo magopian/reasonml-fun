@@ -123,3 +123,27 @@ let make = (~message, _children) => {
     </div>
 };
 ```
+
+
+## Using the reason component in react
+
+To export our reason component and make it available, we can use the
+`wrapReasonForJs` helper:
+
+```Reason
+let jsComponent =
+  ReasonReact.wrapReasonForJs(
+    ~component,
+    (jsProps) => make(~message=jsProps##message, [||])
+  );
+```
+
+The compiled version of the reason code down to javascript is in
+`lib/js/src/app.js`. You can distribute this file as you see fit, and then use
+it as such in your react app:
+
+```Javascript
+var MyReasonComponent = require('app').jsComponent;
+
+<MyReasonComponent message="Some awesome message here" />
+```
