@@ -139,11 +139,20 @@ let jsComponent =
 ```
 
 The compiled version of the reason code down to javascript is in
-`lib/js/src/app.js`. You can distribute this file as you see fit, and then use
-it as such in your react app:
+`lib/js/src/app.js`. You can use it in your react app by importing it:
 
 ```Javascript
 var MyReasonComponent = require('app').jsComponent;
 
 <MyReasonComponent message="Some awesome message here" />
 ```
+
+The minimum requirements for using this reason compiled to js file are:
+- adding bs-platform, reason-react and reason-js to your package.json
+- optionnally adding an eslint rule to ignore those files compiled by
+  bucklescript (if you're seeing `Module build failed: TypeError: Cannot read
+  property ‘node’ of undefined`)
+
+If you want to also compile those files in your react project, you can check
+[Bringing ReasonML into an existing react
+app](https://medium.com/@alanhietala/bringing-reasonml-into-an-existing-react-app-d1006a72433b).
