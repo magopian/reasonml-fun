@@ -21,7 +21,7 @@ let make = (~product, ~logo, ~pubDate, ~version, _children) => {
     <Card>
       <img src=logo alt="logo" />
       <h3> (str(product)) </h3>
-      <p> <strong> (str(version)) </strong> (str(pubDate)) </p>
+      <p> <strong> (str(version)) </strong> (str(" " ++ pubDate)) </p>
     </Card>
 };
 

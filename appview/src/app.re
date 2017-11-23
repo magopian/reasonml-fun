@@ -63,7 +63,12 @@ let make = (~message, _children) => {
             />
           </Col>
           <Col span=6>
-            <BuildInfo product="Firefox Beta" logo=betaLogo pubDate="2017-11-21" version="58.0" />
+            <BuildInfo
+              product="Firefox Beta"
+              logo=betaLogo
+              pubDate="2017-11-21"
+              version="58.0b5"
+            />
           </Col>
           <Col span=6>
             <BuildInfo
