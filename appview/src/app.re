@@ -6,14 +6,6 @@
 
 [@bs.module] external logo : string = "./logo.svg";
 
-[@bs.module] external firefoxLogo : string = "./firefox.png";
-
-[@bs.module] external focusLogo : string = "./focus.png";
-
-[@bs.module] external betaLogo : string = "./beta.png";
-
-[@bs.module] external nightlyLogo : string = "./nightly.png";
-
 let str = ReasonReact.stringToElement;
 
 module Row = {
@@ -52,12 +44,17 @@ let make = (~message, _children) => {
       <div className="Apps-Grid">
         <Row gutter=16>
           <Col span=6>
-            <BuildInfo product="Firefox" logo=firefoxLogo pubDate="2017-11-14" version="57.0" />
+            <BuildInfo
+              product="Firefox"
+              logo="https://lh3.googleusercontent.com/shH5ALdqmZysSU2F5SF52674W7NFP1xtLBZMuzUR5u6Uotbgql3ATFFFhtkJjBCm4R3i=w300"
+              pubDate="2017-11-14"
+              version="57.0"
+            />
           </Col>
           <Col span=6>
             <BuildInfo
               product="Firefox Focus"
-              logo=focusLogo
+              logo="https://lh3.googleusercontent.com/uoqToM7l-x3lZNjFOzNkVxEilkKfEzGh9v8BB8b6pP1l9TltE4Sxd1XGJuiksjM4a1s=w300"
               pubDate="2017-11-17"
               version="57.0"
             />
@@ -65,7 +62,7 @@ let make = (~message, _children) => {
           <Col span=6>
             <BuildInfo
               product="Firefox Beta"
-              logo=betaLogo
+              logo="https://lh3.googleusercontent.com/872N1-Q_qFJbvPmCTc1bvwa0NjY49HbUAC-F-yl2XEFyfePrnTGPthGH4C3FcYoP5Vc=w300"
               pubDate="2017-11-21"
               version="58.0b5"
             />
@@ -73,7 +70,7 @@ let make = (~message, _children) => {
           <Col span=6>
             <BuildInfo
               product="Firefox Nightly"
-              logo=nightlyLogo
+              logo="https://lh3.googleusercontent.com/5ZYLS3ztW1XBfSf32onyhAVLq_uZQmJIYdhz8VlQwuvpB7x73jaDqtJlTtmxcsvit0I=w300"
               pubDate="2017-11-23"
               version="59.0"
             />
