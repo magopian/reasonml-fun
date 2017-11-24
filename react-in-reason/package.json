@@ -2,6 +2,7 @@
   "name": "appview",
   "version": "0.1.0",
   "private": true,
+  "main": "lib/js/src/app.js",
   "dependencies": {
     "antd": "^2.13.10",
     "photon-ant": "^0.1.2",

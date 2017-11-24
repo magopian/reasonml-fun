@@ -156,3 +156,10 @@ The minimum requirements for using this reason compiled to js file are:
 If you want to also compile those files in your react project, you can check
 [Bringing ReasonML into an existing react
 app](https://medium.com/@alanhietala/bringing-reasonml-into-an-existing-react-app-d1006a72433b).
+
+Note: it's very important that the package.json and the bsconfig.json both have
+the same `name` value, and that the package.json file has a `main` entry:
+
+```json
+"main": "lib/js/src/app.js"
+```
