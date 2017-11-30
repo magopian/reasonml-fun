@@ -12,17 +12,114 @@ module Card = {
     );
 };
 
-let component = ReasonReact.statelessComponent("BuildInfo");
+type state = {
+  logoUrl: option(string),
+  pubDate: option(string)
+};
+
+type action =
+  | InfoRequested
+  | NewInfo(option(string), option(string))
+  | ErrRequestingInfo(string);
+
+type doc;
+
+let requestInfo = (reduce, url) => {
+  Js.log("requesting info");
+  Js.Promise.(
+    Fetch.fetch("https://cors-anywhere.herokuapp.com/" ++ url)
+    |> then_(Fetch.Response.text)
+    |> then_(
+         (text) =>
+           {
+             let domParser: string => doc = [%bs.raw
+               {| function (content) {
+                    return new DOMParser().parseFromString(content, "text/html")
+                  }
+                |}
+             ];
+             let doc = domParser(text);
+             let querySelectorProperty: (doc, string, string) => option(string) = [%bs.raw
+               {|
+                  function (doc, selectors, property) {
+                      var element = doc.querySelector(selectors);
+                      return element[property];
+                  }
+                |}
+             ];
+             let logoUrl = querySelectorProperty(doc, ".main-content .cover-image", "src");
+             let pubDate =
+               querySelectorProperty(
+                 doc,
+                 ".details-section-contents [itemprop=datePublished]",
+                 "innerHTML"
+               );
+             Js.log(logoUrl);
+             Js.log(pubDate);
+             reduce(() => NewInfo(logoUrl, pubDate), ());
+             ()
+           }
+           |> resolve
+       )
+    |> catch(
+         (error) =>
+           {
+             Js.log(error);
+             reduce(() => ErrRequestingInfo("Error while getting the response"), ());
+             ()
+           }
+           |> resolve
+       )
+    |> ignore
+  )
+};
+
+let component = ReasonReact.reducerComponent("BuildInfo");
 
 /* Implement the Reason component */
-let make = (~product, ~logo, ~pubDate, ~version, _children) => {
+let make = (~product, ~url, ~version, _children) => {
   ...component,
-  render: (_self) =>
+  initialState: () => {logoUrl: None, pubDate: None},
+  reducer: (action, _state) =>
+    switch action {
+    | InfoRequested =>
+      ReasonReact.UpdateWithSideEffects(
+        {logoUrl: Some("loading logo"), pubDate: Some("loading pubdate")},
+        ((self) => requestInfo(self.reduce, url))
+      )
+    | NewInfo(maybeLogoUrl, maybePubDate) =>
+      Js.log("received new info");
+      ReasonReact.Update({logoUrl: maybeLogoUrl, pubDate: maybePubDate})
+    | ErrRequestingInfo(error) =>
+      Js.log("error!");
+      ReasonReact.Update({logoUrl: Some(error), pubDate: Some(error)})
+    },
+  didMount: (self) => {
+    self.reduce(() => InfoRequested, ());
+    ReasonReact.NoUpdate
+  },
+  render: ({state}) => {
+    let logoUrl =
+      switch state.logoUrl {
+      | None => ""
+      | Some(url) => url
+      };
+    let pubDate =
+      switch state.pubDate {
+      | None => ""
+      | Some(date) => date
+      };
+    Js.log("rendering");
+    Js.log(state.pubDate);
+    Js.log(pubDate);
     <Card>
-      <img src=logo alt="logo" />
-      <h3> (str(product)) </h3>
-      <p> <strong> (str(version)) </strong> (str(" " ++ pubDate)) </p>
+      <a href=url>
+        <img src=logoUrl alt="logo" />
+        <h3> (str(product)) </h3>
+        <p> <strong> (str(version)) </strong> (str(" " ++ pubDate)) </p>
+      </a>
     </Card>
+  }
 };
 
 /* Wrap the Reason component so it's usable in React component in JS */
@@ -30,11 +127,5 @@ let jsComponent =
   ReasonReact.wrapReasonForJs(
     ~component,
     (jsProps) =>
-      make(
-        ~product=jsProps##message,
-        ~logo=jsProps##logo,
-        ~pubDate=jsProps##pubDate,
-        ~version=jsProps##version,
-        [||]
-      )
+      make(~product=jsProps##message, ~url=jsProps##url, ~version=jsProps##version, [||])
   );

@@ -46,32 +46,28 @@ let make = (~message, _children) => {
           <Col span=6>
             <BuildInfo
               product="Firefox"
-              logo="https://lh3.googleusercontent.com/shH5ALdqmZysSU2F5SF52674W7NFP1xtLBZMuzUR5u6Uotbgql3ATFFFhtkJjBCm4R3i=w300"
-              pubDate="2017-11-14"
+              url="https://play.google.com/store/apps/details?id=org.mozilla.firefox"
               version="57.0"
             />
           </Col>
           <Col span=6>
             <BuildInfo
               product="Firefox Focus"
-              logo="https://lh3.googleusercontent.com/uoqToM7l-x3lZNjFOzNkVxEilkKfEzGh9v8BB8b6pP1l9TltE4Sxd1XGJuiksjM4a1s=w300"
-              pubDate="2017-11-17"
+              url="https://play.google.com/store/apps/details?id=org.mozilla.focus"
               version="57.0"
             />
           </Col>
           <Col span=6>
             <BuildInfo
               product="Firefox Beta"
-              logo="https://lh3.googleusercontent.com/872N1-Q_qFJbvPmCTc1bvwa0NjY49HbUAC-F-yl2XEFyfePrnTGPthGH4C3FcYoP5Vc=w300"
-              pubDate="2017-11-21"
+              url="https://play.google.com/store/apps/details?id=org.mozilla.firefox_beta"
               version="58.0b5"
             />
           </Col>
           <Col span=6>
             <BuildInfo
               product="Firefox Nightly"
-              logo="https://lh3.googleusercontent.com/5ZYLS3ztW1XBfSf32onyhAVLq_uZQmJIYdhz8VlQwuvpB7x73jaDqtJlTtmxcsvit0I=w300"
-              pubDate="2017-11-23"
+              url="https://play.google.com/store/apps/details?id=org.mozilla.fennec_aurora"
               version="59.0"
             />
           </Col>

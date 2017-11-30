@@ -5,6 +5,7 @@
   "main": "lib/js/src/buildInfo.js",
   "dependencies": {
     "antd": "^2.13.10",
+    "bs-fetch": "^0.2.0",
     "bs-platform": "^2.1.0",
     "photon-ant": "^0.1.2",
     "react": "^16.1.1",
