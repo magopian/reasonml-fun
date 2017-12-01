@@ -24,6 +24,8 @@ type action =
 
 type doc;
 
+[@bs.send] external docQuerySelector : (doc, string) => Js.Dict.t(string) = "querySelector";
+
 let requestInfo = (reduce, url) => {
   Js.log("requesting info");
   Js.Promise.(
@@ -39,23 +41,17 @@ let requestInfo = (reduce, url) => {
                 |}
              ];
              let doc = domParser(text);
-             let querySelectorProperty: (doc, string, string) => Js.nullable(string) = [%bs.raw
-               {|
-                  function (doc, selectors, property) {
-                      var element = doc.querySelector(selectors);
-                      return element[property];
-                  }
-                |}
-             ];
+             let querySelectorProperty = (doc, selectors, property) => {
+               let element = docQuerySelector(doc, selectors);
+               Js.Dict.get(element, property)
+             };
              let logoUrl: option(string) =
-               Js.Nullable.to_opt(querySelectorProperty(doc, ".main-content .cover-image", "src"));
+               querySelectorProperty(doc, ".main-content .cover-image", "src");
              let pubDate =
-               Js.Nullable.to_opt(
-                 querySelectorProperty(
-                   doc,
-                   ".details-section-contents [itemprop=datePublished]",
-                   "innerHTML"
-                 )
+               querySelectorProperty(
+                 doc,
+                 ".details-section-contents [itemprop=datePublished]",
+                 "innerHTML"
                );
              reduce(() => NewInfo(logoUrl, pubDate), ());
              ()
