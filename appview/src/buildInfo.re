@@ -39,7 +39,7 @@ let requestInfo = (reduce, url) => {
                 |}
              ];
              let doc = domParser(text);
-             let querySelectorProperty: (doc, string, string) => option(string) = [%bs.raw
+             let querySelectorProperty: (doc, string, string) => Js.nullable(string) = [%bs.raw
                {|
                   function (doc, selectors, property) {
                       var element = doc.querySelector(selectors);
@@ -47,15 +47,16 @@ let requestInfo = (reduce, url) => {
                   }
                 |}
              ];
-             let logoUrl = querySelectorProperty(doc, ".main-content .cover-image", "src");
+             let logoUrl: option(string) =
+               Js.Nullable.to_opt(querySelectorProperty(doc, ".main-content .cover-image", "src"));
              let pubDate =
-               querySelectorProperty(
-                 doc,
-                 ".details-section-contents [itemprop=datePublished]",
-                 "innerHTML"
+               Js.Nullable.to_opt(
+                 querySelectorProperty(
+                   doc,
+                   ".details-section-contents [itemprop=datePublished]",
+                   "innerHTML"
+                 )
                );
-             Js.log(logoUrl);
-             Js.log(pubDate);
              reduce(() => NewInfo(logoUrl, pubDate), ());
              ()
            }
@@ -109,9 +110,6 @@ let make = (~product, ~url, ~version, _children) => {
       | None => ""
       | Some(date) => date
       };
-    Js.log("rendering");
-    Js.log(state.pubDate);
-    Js.log(pubDate);
     <Card>
       <a href=url>
         <img src=logoUrl alt="logo" />
