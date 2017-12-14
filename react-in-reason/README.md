@@ -40,7 +40,7 @@ Then rewire the scripts in `package.json`:
 +    "eject": "react-app-rewired eject --scripts-version reason-scripts",
 ```
 
-and add a `config-overrides.json` file:
+and add a `config-overrides.js` file:
 
 ```
 module.exports = function override(config, env) {
@@ -57,23 +57,22 @@ $ yarn add photon-ant
 $ yarn add react-app-rewire-less --dev
 ```
 
-Then modify the `config-overrides.js` file:
+Then modify the `config-overrides.js` file to be:
 
 ```diff
- const {injectBabelPlugin} = require('react-app-rewired');
-+const rewireLess = require('react-app-rewire-less');
+const {injectBabelPlugin} = require('react-app-rewired');
+const rewireLess = require('react-app-rewire-less');
 
- module.exports = function override(config, env) {
-   config = injectBabelPlugin(
--    ['import', {libraryName: 'antd', style: 'css'}],
-+    ['import', {libraryName: 'antd', style: true}],
-     config,
-   );
+module.exports = function override(config, env) {
+  config = injectBabelPlugin(
+    ['import', {libraryName: 'antd', style: true}],
+    config
+  );
 
-+  config = rewireLess(config, env);
-+
-   return config;
- };
+  config = rewireLess(config, env);
+
+  return config;
+};
 ```
 
 And finally add the photon-ant import at the top of your `src/app.re` file:
